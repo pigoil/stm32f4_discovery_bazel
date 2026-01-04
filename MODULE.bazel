@@ -1,0 +1,35 @@
+module(
+	name = "f4_discovery",
+	version = "0.0.0",
+)
+
+# Provides standard constraint settings/values like @platforms//cpu:arm and @platforms//os:none
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+
+# Mirror the previous WORKSPACE.bazel http_archive.
+http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# Use git_repository for STM32CubeF4 so git submodules (CMSIS device, HAL driver, BSP, etc.) are populated.
+git_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+git_repository(
+	name = "stm32f4_cube",
+	remote = "https://github.com/STMicroelectronics/STM32CubeF4.git",
+	commit = "94cae6e83f00e276a11957e7833c01ac3d0bd7af", # v1.28.3
+	init_submodules = True,
+	recursive_init_submodules = True,
+	build_file = "@//cube:stm32f4_cube.BUILD",
+)
+
+# Hedron's Compile Commands Extractor for Bazel
+# https://github.com/hedronvision/bazel-compile-commands-extractor
+git_override(
+    module_name = "hedron_compile_commands",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    commit = "0e990032f3c5a866e72615cf67e5ce22186dcb97",
+    # Replace the commit hash (above) with the latest (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
+    # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in the README).
+)
+
+register_toolchains("@//toolchain:stm32_toolchain_linux_gcc")

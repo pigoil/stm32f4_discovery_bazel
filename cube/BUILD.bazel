@@ -1,0 +1,21 @@
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "hal_config",
+    hdrs = ["stm32f4xx_hal_conf.h"],
+    includes = ["."],
+	defines = [
+		"USE_HAL_DRIVER",
+		"STM32F429xx",
+	],
+)
+
+cc_library(
+    name = "freertos_config",
+    hdrs = ["FreeRTOSConfig.h"],
+    includes = ["."],
+	defines = [
+		"USE_HAL_DRIVER",
+		"STM32F429xx",
+	],
+)

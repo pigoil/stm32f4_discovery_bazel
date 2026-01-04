@@ -1,0 +1,5 @@
+bazel-bin
+bazel-out
+bazel-f4_discovery
+bazel-f4_discovery_bazel
+bazel-testlogs

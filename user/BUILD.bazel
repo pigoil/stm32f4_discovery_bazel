@@ -1,0 +1,54 @@
+load("@//toolchain:package.bzl", "stm32_binary", "openocd_flash")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "startup",
+    srcs = ["startup_stm32f429xx.s"],
+)
+
+cc_library(
+    name = "interrupts",
+    srcs = [
+        "stm32f4xx_it.c",
+    ],
+    hdrs = [
+        "stm32f4xx_it.h",
+    ],
+    deps = [
+        "@stm32f4_cube//:hal",
+    ],
+    alwayslink = 1,
+)
+
+cc_library(
+    name = "system",
+    srcs = [
+        "hooks.c",
+        "stm32f4xx_hal_timebase_tim.c",
+        "sysmem.c",
+        "syscalls.c",
+        "system_stm32f4xx.c",
+    ],
+    deps = [
+        "@stm32f4_cube//:hal",
+        "@stm32f4_cube//:freertos",
+    ],
+    alwayslink = 1,
+)
+
+stm32_binary(
+    name = "app",
+    srcs = [
+        "main.cc",
+    ],
+    deps = [
+        ":interrupts",
+        ":startup",
+        ":system",
+        "@stm32f4_cube//:f429i_discovery_drivers",
+    ],
+    linker_script = "STM32F429XX_FLASH.ld",
+)
+
+openocd_flash(name = "flash", target = ":app")

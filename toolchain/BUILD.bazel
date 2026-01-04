@@ -1,0 +1,44 @@
+load(":cc_toolchain_config.bzl", "stm32_cc_toolchain", "stm32_toolchain_info")
+
+package(default_visibility = ["//visibility:public"])
+
+platform(
+    name = "stm32_linux_gcc_platform",
+    constraint_values = [
+        "@platforms//cpu:arm",
+        "@platforms//os:none",
+    ],
+)
+
+stm32_toolchain_info(
+    name = "arm_none_eabi_gcc",
+    gcc = "/usr/bin/arm-none-eabi-gcc",
+    ld = "/usr/bin/arm-none-eabi-gcc",
+    ar = "/usr/bin/arm-none-eabi-ar",
+    as_ = "/usr/bin/arm-none-eabi-as",
+    cpp = "/usr/bin/arm-none-eabi-cpp",
+    nm = "/usr/bin/arm-none-eabi-nm",
+    objcopy = "/usr/bin/arm-none-eabi-objcopy",
+    objdump = "/usr/bin/arm-none-eabi-objdump",
+    strip = "/usr/bin/arm-none-eabi-strip",
+    dwp = "/usr/bin/arm-none-eabi-dwp",
+    gcov = "/usr/bin/arm-none-eabi-gcov",
+    sysroot = "/usr/arm-none-eabi",
+    cxx_builtin_include_directories = [
+        "/usr/arm-none-eabi/include/c++/14.2.0",
+        "/usr/arm-none-eabi/include/c++/14.2.0/arm-none-eabi",
+        "/usr/arm-none-eabi/include/c++/14.2.0/backward",
+        "/usr/lib/gcc/arm-none-eabi/14.2.0/include",
+        "/usr/lib/gcc/arm-none-eabi/14.2.0/include-fixed",
+        "/usr/arm-none-eabi/include",
+    ],
+)
+
+stm32_cc_toolchain(
+    name = "stm32_toolchain_linux_gcc",
+    toolchain_info = ":arm_none_eabi_gcc",
+    exec_compatible_with = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+)

@@ -1,0 +1,31 @@
+# Bazel convenience symlinks
+/bazel-*
+/external
+
+# Bazel specific
+.bazelrc.user
+
+# IDEs and editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.idea/
+.cache/clangd
+*.swp
+*~
+
+# Compiled outputs (usually in bazel-out, but just in case)
+*.elf
+*.bin
+*.hex
+*.map
+*.list
+*.log
+
+# Hedron's Compile Commands
+compile_commands.json
+
+# OS specific
+.DS_Store
+Thumbs.db
